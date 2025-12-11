@@ -23,7 +23,7 @@ def main():
 
     ipd.CIDR_Mask = Ip_utils.get_cidr(ip_mask)
 
-    ipd.classes = Ip_utils.get_class_type(ip_mask)
+    ipd.class_type = Ip_utils.get_class_type(ip_mask)
 
     fw.get_data(ipd.__dict__)
 
