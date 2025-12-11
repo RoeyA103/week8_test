@@ -46,7 +46,10 @@ class Ip_utils:
              
     def get_network_add(ip:str,mask:str)->str:
         """
-        & Sets each bit to 1 if both bits are 1
+        Extracts each octet into a separate part
+        Then converts to a number to apply the & operation on it
+        To compare bits
+        (& Sets each bit to 1 if both bits are 1)
         """
         network = ''
 
@@ -61,11 +64,16 @@ class Ip_utils:
         return network
     
     def get_broadcast_address(ip:str,mask:str)->str:
+        """
+        Converts each octet into a separate part
+        Then runs the operation | which returns 1 if one of the bits is 1
+        The ~ sign is to flip each bit (if it was 1 it would be 0 and vice versa)
+        The idea is that if I flip each bit in the subnet I actually find out my available possibilities, and then I connect with the bits in the current address because I start from the bottom and end according to the given address
+        The result is the largest option in that octet = broadcast
+        """
         ip = ip.split('.')
         mask = mask.split('.')
-        ip = [int(bin(int(octet)), 2) for octet in ip]
-        mask = [int(bin(int(octet)), 2) for octet in mask]
-        broadcast = [(ioctet | ~moctet) & 0xff for ioctet, moctet in zip(ip, mask)]
+        broadcast = [(int(ioctet) | ~int(moctet)) & 0xff for ioctet, moctet in zip(ip, mask)]
         res = ""
         for oct in broadcast:
             res += str(oct) + "."
